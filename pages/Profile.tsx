@@ -68,49 +68,67 @@ const ProfileSettings = () => {
     };
 
     const handleSave = () => {
-        // Save all data to localStorage
-        localStorage.setItem('userName', name);
-        localStorage.setItem('userWeight', weight);
-        localStorage.setItem('userHeight', height);
-        localStorage.setItem('userInstagram', instagram);
-        localStorage.setItem('userAvatar', avatar);
+        try {
+            // Validate weight and height are numbers
+            const weightVal = parseFloat(weight);
+            const heightVal = parseFloat(height);
+            
+            if (isNaN(weightVal) || weightVal <= 0) {
+                alert('Por favor ingresa un peso válido');
+                return;
+            }
+            if (isNaN(heightVal) || heightVal <= 0) {
+                alert('Por favor ingresa una altura válida');
+                return;
+            }
 
-        // Update Weight History
-        const today = new Date().toISOString().split('T')[0];
-        const currentWeightVal = parseFloat(weight);
+            // Save all data to localStorage
+            localStorage.setItem('userName', name || 'Usuario');
+            localStorage.setItem('userWeight', weight);
+            localStorage.setItem('userHeight', height);
+            localStorage.setItem('userInstagram', instagram);
+            localStorage.setItem('userAvatar', avatar);
+            localStorage.setItem('userGoal', goal);
 
-        let newHistory = [...weightHistory];
-        const existingEntryIndex = newHistory.findIndex(h => h.date === today);
+            // Update Weight History
+            const today = new Date().toISOString().split('T')[0];
 
-        if (existingEntryIndex >= 0) {
-            newHistory[existingEntryIndex].weight = currentWeightVal;
-        } else {
-            newHistory.push({ date: today, weight: currentWeightVal });
-        }
+            let newHistory = [...weightHistory];
+            const existingEntryIndex = newHistory.findIndex(h => h.date === today);
 
-        // Sort by date just in case
-        newHistory.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+            if (existingEntryIndex >= 0) {
+                newHistory[existingEntryIndex].weight = weightVal;
+            } else {
+                newHistory.push({ date: today, weight: weightVal });
+            }
 
-        setWeightHistory(newHistory);
-        localStorage.setItem('userWeightHistory', JSON.stringify(newHistory));
-        localStorage.setItem('userAttendance', JSON.stringify(attendance));
+            // Sort by date just in case
+            newHistory.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-        // Dispatch event so Sidebar updates immediately
-        window.dispatchEvent(new Event('user-update'));
+            setWeightHistory(newHistory);
+            localStorage.setItem('userWeightHistory', JSON.stringify(newHistory));
+            localStorage.setItem('userAttendance', JSON.stringify(attendance));
 
-        // UI Feedback
-        const btn = document.getElementById('save-btn');
-        if (btn) {
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="material-symbols-outlined">check</span> Guardado';
-            btn.classList.add('bg-green-500', 'text-white');
-            btn.classList.remove('bg-primary', 'text-black');
+            // Dispatch event so Sidebar updates immediately
+            window.dispatchEvent(new Event('user-update'));
 
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.classList.remove('bg-green-500', 'text-white');
-                btn.classList.add('bg-primary', 'text-black');
-            }, 2000);
+            // UI Feedback
+            const btn = document.getElementById('save-btn');
+            if (btn) {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span class="material-symbols-outlined">check</span> Guardado';
+                btn.classList.add('bg-green-500', 'text-white');
+                btn.classList.remove('bg-primary', 'text-black');
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('bg-green-500', 'text-white');
+                    btn.classList.add('bg-primary', 'text-black');
+                }, 2000);
+            }
+        } catch (error) {
+            console.error('Error al guardar:', error);
+            alert('Hubo un error al guardar los datos');
         }
     };
 
