@@ -1,0 +1,8 @@
+{
+  "name": "Fitmarvin",
+  "description": "An elite fitness platform featuring workout tracking, nutrition plans, community features, and AI-powered analysis for images and videos using Gemini.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
