@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   const apiKey = env.VITE_GEMINI_API_KEY || env.GEMINI_API_KEY;
 
   return {
-    base: '/FitMarvinSaludable/',
+    base: '/FitMarvinSaludable2/',
     server: {
       port: 3000,
       host: '0.0.0.0',
