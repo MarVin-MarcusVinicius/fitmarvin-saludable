@@ -126,6 +126,24 @@ const ProfileSettings = () => {
             reader.onloadend = () => {
                 const base64String = reader.result as string;
                 setAvatar(base64String);
+                // Automatically save the avatar to localStorage
+                localStorage.setItem('userAvatar', base64String);
+                // Dispatch event so Sidebar updates immediately
+                window.dispatchEvent(new Event('user-update'));
+                // Show feedback
+                const saveBtn = document.getElementById('save-btn');
+                if (saveBtn) {
+                    const originalText = saveBtn.innerHTML;
+                    saveBtn.innerHTML = '<span class="material-symbols-outlined">photo_ok</span> Foto Guardada';
+                    saveBtn.classList.add('bg-green-500', 'text-white');
+                    saveBtn.classList.remove('bg-primary', 'text-black');
+
+                    setTimeout(() => {
+                        saveBtn.innerHTML = originalText;
+                        saveBtn.classList.remove('bg-green-500', 'text-white');
+                        saveBtn.classList.add('bg-primary', 'text-black');
+                    }, 2000);
+                }
             };
 
             reader.readAsDataURL(file);
