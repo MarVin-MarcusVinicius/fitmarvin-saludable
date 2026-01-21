@@ -74,25 +74,29 @@ const ProfileSettings = () => {
             const heightVal = parseFloat(height);
             
             if (isNaN(weightVal) || weightVal <= 0) {
-                alert('Por favor ingresa un peso válido');
+                alert('Por favor ingresa un peso válido (mayor a 0)');
                 return;
             }
             if (isNaN(heightVal) || heightVal <= 0) {
-                alert('Por favor ingresa una altura válida');
+                alert('Por favor ingresa una altura válida (mayor a 0)');
                 return;
             }
 
-            // Save all data to localStorage
-            localStorage.setItem('userName', name || 'Usuario');
-            localStorage.setItem('userWeight', weight);
-            localStorage.setItem('userHeight', height);
-            localStorage.setItem('userInstagram', instagram);
-            localStorage.setItem('userAvatar', avatar);
-            localStorage.setItem('userGoal', goal);
+            // Validate string lengths
+            if (!name || name.trim().length === 0) {
+                alert('Por favor ingresa un nombre');
+                return;
+            }
+
+            // Save basic data to localStorage
+            localStorage.setItem('userName', name.trim());
+            localStorage.setItem('userWeight', String(weightVal));
+            localStorage.setItem('userHeight', String(heightVal));
+            localStorage.setItem('userInstagram', instagram || '');
+            localStorage.setItem('userGoal', goal || '');
 
             // Update Weight History
             const today = new Date().toISOString().split('T')[0];
-
             let newHistory = [...weightHistory];
             const existingEntryIndex = newHistory.findIndex(h => h.date === today);
 
@@ -102,12 +106,21 @@ const ProfileSettings = () => {
                 newHistory.push({ date: today, weight: weightVal });
             }
 
-            // Sort by date just in case
+            // Sort by date
             newHistory.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+            
+            // Keep only last 90 days to prevent localStorage overflow
+            const ninetyDaysAgo = new Date();
+            ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+            newHistory = newHistory.filter(h => new Date(h.date) >= ninetyDaysAgo);
 
             setWeightHistory(newHistory);
             localStorage.setItem('userWeightHistory', JSON.stringify(newHistory));
-            localStorage.setItem('userAttendance', JSON.stringify(attendance));
+            
+            // Only save attendance if not empty to prevent bloat
+            if (Object.keys(attendance).length > 0) {
+                localStorage.setItem('userAttendance', JSON.stringify(attendance));
+            }
 
             // Dispatch event so Sidebar updates immediately
             window.dispatchEvent(new Event('user-update'));
@@ -128,7 +141,7 @@ const ProfileSettings = () => {
             }
         } catch (error) {
             console.error('Error al guardar:', error);
-            alert('Hubo un error al guardar los datos');
+            alert('Error al guardar: localStorage puede estar lleno. Intenta limpiar el navegador.');
         }
     };
 
