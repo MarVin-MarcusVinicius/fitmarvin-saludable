@@ -139,28 +139,51 @@ const ProfileSettings = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
+            
+            // Validate file size (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                alert('La imagen es demasiado grande. Máximo 2MB.');
+                return;
+            }
+
             const reader = new FileReader();
 
-            reader.onload = () => {
-                const base64String = reader.result as string;
-                setAvatar(base64String);
-                // Automatically save the avatar to localStorage
-                localStorage.setItem('userAvatar', base64String);
-                // Dispatch event so Sidebar updates immediately
-                window.dispatchEvent(new Event('user-update'));
-                // Show feedback
-                const saveBtn = document.getElementById('save-btn');
-                if (saveBtn) {
-                    const originalText = saveBtn.innerHTML;
-                    saveBtn.innerHTML = '<span class="material-symbols-outlined">check</span> Foto Guardada';
-                    saveBtn.classList.add('bg-green-500', 'text-white');
-                    saveBtn.classList.remove('bg-primary', 'text-black');
+            reader.onerror = () => {
+                alert('Error al cargar la imagen');
+                console.error('FileReader error:', reader.error);
+            };
 
-                    setTimeout(() => {
-                        saveBtn.innerHTML = originalText;
-                        saveBtn.classList.remove('bg-green-500', 'text-white');
-                        saveBtn.classList.add('bg-primary', 'text-black');
-                    }, 2000);
+            reader.onload = () => {
+                try {
+                    const base64String = reader.result as string;
+                    console.log('Imagen cargada, tamaño:', base64String.length);
+                    
+                    // Update state
+                    setAvatar(base64String);
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userAvatar', base64String);
+                    
+                    // Dispatch event
+                    window.dispatchEvent(new Event('user-update'));
+                    
+                    // Show feedback
+                    const saveBtn = document.getElementById('save-btn');
+                    if (saveBtn) {
+                        const originalText = saveBtn.innerHTML;
+                        saveBtn.innerHTML = '<span class="material-symbols-outlined">check</span> Foto Guardada';
+                        saveBtn.classList.add('bg-green-500', 'text-white');
+                        saveBtn.classList.remove('bg-primary', 'text-black');
+
+                        setTimeout(() => {
+                            saveBtn.innerHTML = originalText;
+                            saveBtn.classList.remove('bg-green-500', 'text-white');
+                            saveBtn.classList.add('bg-primary', 'text-black');
+                        }, 2000);
+                    }
+                } catch (error) {
+                    console.error('Error processing image:', error);
+                    alert('Error al procesar la imagen');
                 }
             };
 
@@ -209,7 +232,7 @@ const ProfileSettings = () => {
                     <section className="flex flex-col md:flex-row items-center gap-8 p-8 bg-card-light dark:bg-surface-dark border border-slate-200 dark:border-border-dark rounded-3xl shadow-sm">
                         <div className="relative group cursor-pointer" onClick={handleAvatarClick}>
                             <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-100 dark:border-border-dark group-hover:border-primary transition-colors">
-                                <img src={avatar} alt="User Avatar" className="w-full h-full object-cover" />
+                                <img key={avatar} src={avatar} alt="User Avatar" className="w-full h-full object-cover" />
                             </div>
                             <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="material-symbols-outlined text-white text-3xl">photo_camera</span>
