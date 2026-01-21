@@ -141,7 +141,7 @@ const ProfileSettings = () => {
             const file = e.target.files[0];
             const reader = new FileReader();
 
-            reader.onloadend = () => {
+            reader.onload = () => {
                 const base64String = reader.result as string;
                 setAvatar(base64String);
                 // Automatically save the avatar to localStorage
@@ -152,7 +152,7 @@ const ProfileSettings = () => {
                 const saveBtn = document.getElementById('save-btn');
                 if (saveBtn) {
                     const originalText = saveBtn.innerHTML;
-                    saveBtn.innerHTML = '<span class="material-symbols-outlined">photo_ok</span> Foto Guardada';
+                    saveBtn.innerHTML = '<span class="material-symbols-outlined">check</span> Foto Guardada';
                     saveBtn.classList.add('bg-green-500', 'text-white');
                     saveBtn.classList.remove('bg-primary', 'text-black');
 

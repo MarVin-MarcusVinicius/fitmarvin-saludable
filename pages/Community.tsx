@@ -1,5 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { IMAGES } from '../constants';
+
+interface Post {
+    id: number;
+    user: string;
+    time: string;
+    text: string;
+    likes: number;
+    image: string | null;
+}
 
 const Community = () => {
     const [postText, setPostText] = useState('');
@@ -8,33 +17,57 @@ const Community = () => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Initial posts data
-    const [posts, setPosts] = useState([
+    const initialPosts: Post[] = [
         { id: 4, user: "Marvin R.", time: "Hace 2 min", text: "¡Finalizando la rutina de tríceps con todo! 💪", likes: 12, image: IMAGES.USER_TRICEPS },
         { id: 3, user: "Marvin R.", time: "Hace 10 min", text: "Dándole duro al pecho hoy. La constancia es la clave. 🔥", likes: 18, image: IMAGES.USER_CHEST },
         { id: 2, user: "Marvin R.", time: "Hace 25 min", text: "Empezando el día con unos buenos kilómetros en la cinta. 🏃‍♂️💨", likes: 15, image: IMAGES.USER_TREADMILL },
         { id: 1, user: "Carlos G.", time: "Hace 1 hora", text: "¡Reto superado! Logré mis primeros 5km sin parar en menos de 28 minutos. 🏃‍♂️💨", likes: 24, image: null as string | null }
-    ]);
+    ];
+
+    const [posts, setPosts] = useState<Post[]>(initialPosts);
+
+    // Load posts from localStorage on mount
+    useEffect(() => {
+        const storedPosts = localStorage.getItem('communityPosts');
+        if (storedPosts) {
+            try {
+                setPosts(JSON.parse(storedPosts));
+            } catch (e) {
+                console.error('Error loading posts:', e);
+                setPosts(initialPosts);
+            }
+        }
+    }, []);
+
+    // Save posts to localStorage whenever they change
+    useEffect(() => {
+        localStorage.setItem('communityPosts', JSON.stringify(posts));
+    }, [posts]);
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             setSelectedFile(file);
-            // Create a fake local URL for preview
-            const objectUrl = URL.createObjectURL(file);
-            setPreview(objectUrl);
+            // Convert to Base64 for persistence
+            const reader = new FileReader();
+            reader.onload = () => {
+                const base64String = reader.result as string;
+                setPreview(base64String);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
     const handlePost = () => {
-        if (!postText.trim() && !selectedFile) return;
+        if (!postText.trim() && !preview) return;
 
-        const newPost = {
+        const newPost: Post = {
             id: Date.now(),
             user: "Marvin R.",
             time: "Ahora mismo",
             text: postText,
             likes: 0,
-            image: preview // Store the object URL
+            image: preview // Store the base64 string
         };
 
         setPosts([newPost, ...posts]);
@@ -60,7 +93,7 @@ const Community = () => {
                     <section>
                         <h2 className="text-2xl font-bold mb-6">Mis Logros Recientes</h2>
                         {/* Editable Achievements Area - Simulated for now */}
-                        <div className="grid grid-cols-2 md://grid-cols-4 gap-4">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {[
                                 { label: "Madrugador", icon: "wb_sunny" },
                                 { label: "7 Días Racha", icon: "local_fire_department" },
@@ -132,7 +165,7 @@ const Community = () => {
                                 </div>
                                 <button
                                     onClick={handlePost}
-                                    disabled={!postText.trim() && !selectedFile}
+                                    disabled={!postText.trim() && !preview}
                                     className="bg-primary px-6 py-2 rounded-lg text-black font-bold hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     Publicar
