@@ -165,7 +165,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['strength', 'muscle-gain', 'endurance']
     },
     {
-        id: 'back-3', videoId: 'XR1lj3HXXhI', img: IMAGES.EXERCISE_ROW, category: 'Back', // Jalón al Pecho
+        id: 'back-3', videoId: 'hvjzcXSrIp8', img: IMAGES.EXERCISE_ROW, category: 'Back', // Jalón al Pecho
         details: {
             ES: {
                 title: 'Jalón al Pecho', muscle: 'Dorsales',
@@ -203,7 +203,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['strength', 'muscle-gain']
     },
     {
-        id: 'back-5', videoId: '4VDOPZmG5RI', img: IMAGES.EXERCISE_ROW, category: 'Back',
+        id: 'back-5', videoId: 'vrbA1NrZXnA', img: IMAGES.EXERCISE_ROW, category: 'Back',
         details: {
             ES: {
                 title: 'Remo en Polea', muscle: 'Espalda Media',
@@ -224,7 +224,7 @@ const EXERCISE_DB: Exercise[] = [
 
     // --- LEGS (PIERNAS) ---
     {
-        id: 'legs-1', videoId: 'eLDN0kVJKk0', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Sentadilla
+        id: 'legs-1', videoId: 'PoRJizFvytw', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Sentadilla
         details: {
             ES: {
                 title: 'Sentadilla Educativa', muscle: 'Cuádriceps, Glúteos',
@@ -262,7 +262,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['strength', 'muscle-gain']
     },
     {
-        id: 'legs-3', videoId: 'I7aQvfpzW-I', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Legs (Seemed OK)
+        id: 'legs-3', videoId: '41Yzfz7RyHc', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Legs (Seemed OK)
         details: {
             ES: {
                 title: 'Rutina de Pierna', muscle: 'Piernas Completas',
@@ -281,7 +281,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['fat-loss', 'endurance']
     },
     {
-        id: 'legs-4', videoId: '1xMHCTI9WY8', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Brutal Legs
+        id: 'legs-4', videoId: 'kcEt_bp88gQ', img: IMAGES.EXERCISE_SQUAT, category: 'Legs', // Buff Academy Brutal Legs
         details: {
             ES: {
                 title: 'Piernas Brutales', muscle: 'Cuádriceps',
@@ -321,7 +321,7 @@ const EXERCISE_DB: Exercise[] = [
 
     // --- SHOULDERS (HOMBROS) ---
     {
-        id: 'shoulders-1', videoId: 'eQIqQjpnUhw', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
+        id: 'shoulders-1', videoId: 'F8q2SxF8Y5M', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
         details: {
             ES: {
                 title: 'Press Militar Barra', muscle: 'Deltoides Anterior',
@@ -378,7 +378,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['muscle-gain']
     },
     {
-        id: 'shoulders-4', videoId: 'L2xQMqQXn88', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
+        id: 'shoulders-4', videoId: 'vLbM2eo0KDI', img: IMAGES.EXERCISE_PRESS, category: 'Shoulders',
         details: {
             ES: {
                 title: 'Press Arnold', muscle: 'Hombro Completo',
@@ -553,7 +553,7 @@ const EXERCISE_DB: Exercise[] = [
         purpose: ['muscle-gain']
     },
     {
-        id: 'abs-3', videoId: 'u5gJeE9LJ9U', img: IMAGES.WORKOUT_BG, category: 'Abs', // Scott Herman Hanging Leg Raise (Verified)
+        id: 'abs-3', videoId: 'yECBaJKAqt8', img: IMAGES.WORKOUT_BG, category: 'Abs', // Scott Herman Hanging Leg Raise (Verified)
         details: {
             ES: {
                 title: 'Elevación de Piernas', muscle: 'Abdominal Inferior',
